@@ -30,7 +30,7 @@ jobs:
       - name: Build con i Command Line Tools (scripts/build-clt.sh)
         run: |
           mkdir -p "$RUNNER_TEMP/clt"
-          scripts/build-clt.sh "$RUNNER_TEMP/clt"
+          bash scripts/build-clt.sh "$RUNNER_TEMP/clt"
           codesign --verify --deep --strict "$RUNNER_TEMP/clt/OpenCode Lens Monitor.app"
       # la build di Xcode delle release (scripts/package.sh), qui senza firma
       - name: Build con Xcode (XcodeGen + xcodebuild, senza firma)
