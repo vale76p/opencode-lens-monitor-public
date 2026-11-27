@@ -13,9 +13,14 @@ permissions:
 
 jobs:
   test-build:
-    # Xcode 27 (Swift 6.4), come le release: lo Swift 6.3 di Xcode 26 va in crash su PanelState.swift.
-    # xcode-27 è un'immagine in anteprima di GitHub (macOS 27): quando arriva macos-27, passare a quella.
-    runs-on: xcode-27
+    # Due versioni di Xcode: 26 (Swift 6.3), il minimo per chi compila dal «Source code» su macOS 26,
+    # e 27 (Swift 6.4), come le release. xcode-27 è un'immagine in anteprima di GitHub (macOS 27):
+    # quando arriva macos-27, passare a quella.
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [macos-26, xcode-27]
+    runs-on: ${{ matrix.runner }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
