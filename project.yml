@@ -7,7 +7,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "0.8.0" # x-release-please-version
+    MARKETING_VERSION: "0.8.1" # x-release-please-version
     # solo build di sviluppo: le release usano major*10000+minor*100+patch (scripts/package.sh), e una
     # build di sviluppo con un numero più basso della release installata sembra più vecchia a
     # LaunchServices e a chronod, che non rileggerebbe la galleria dei widget
