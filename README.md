@@ -89,7 +89,6 @@ Serve la lens 0.38 o successiva: con una versione precedente il pannello dice "A
 
 - **Solo i budget per modello.** Il Monitor segue `LENS_MODEL_LIMITS` e basta: i limiti `LENS_LIMIT_*` di costo o di token giornalieri, settimanali e mensili non li mostra. Con soli quelli il pallino resta grigio e si vedono solo i token di oggi. Un modello con budget che la lens non ha mai visto (di solito un nome sbagliato in `LENS_MODEL_LIMITS`) compare come «mai visto: controlla il nome» e non entra nella media né nel colore.
 - **Non notarizzata.** L'app delle release è firmata "Apple Development" (team `HS87DR6TBX`) e `install.sh` toglie la quarantena. Per la notarizzazione servirebbero un certificato Developer ID e il notary service di Apple.
-- **I test non girano in CI.** I test Swift si lanciano in locale con `scripts/test.sh`; la CI controlla solo gli script.
 - **Nessun avviso di nuova versione.** L'app non controlla se esce una release: si aggiorna rilanciando `install.sh` dallo zip nuovo ([docs/aggiornamento.md](docs/aggiornamento.md)).
 - **Dopo un crash non riparte da sola.** Non ha un LaunchAgent con `KeepAlive`: l'app si riapre a mano o al prossimo login (se "Apri Monitor al login" è attivo).
 - **Il widget non verifica la porta.** Il token della lens è letto dal widget (sandbox) e mandato a chi ascolta su quella porta; il controllo che sia il processo del job lo fa solo l'app.
@@ -139,7 +138,7 @@ Prima di allegare lo zip, provalo da una cartella estratta: `bash install.sh --c
 
 L'installazione fa parte della compatibilità: bundle id `local.opencode-lens-monitor`, App Group `HS87DR6TBX.local.opencode-lens-monitor`, il nome `OpenCode Lens Monitor.app` e la cartella `~/Applications` non cambiano, e `install.sh` aggiorna da qualsiasi versione precedente. Cambiarne uno, o richiedere un passo a mano per aggiornare, è un cambio incompatibile.
 
-Il workflow ha bisogno di «Allow GitHub Actions to create and approve pull requests» in *Settings → Actions → General → Workflow permissions* del repository. Il workflow `script.yml` controlla a ogni push la sintassi degli script e le variabili seguite da caratteri non ASCII.
+Il workflow ha bisogno di «Allow GitHub Actions to create and approve pull requests» in *Settings → Actions → General → Workflow permissions* del repository. Il workflow `script.yml` controlla a ogni push la sintassi degli script e le variabili seguite da caratteri non ASCII; `swift.yml`, su un runner macOS 26, lancia `scripts/test.sh` e compila l'app senza firma, sia con `scripts/build-clt.sh` sia con XcodeGen e `xcodebuild`.
 
 ## Build (sviluppo)
 

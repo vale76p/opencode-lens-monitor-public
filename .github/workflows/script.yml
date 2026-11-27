@@ -1,8 +1,7 @@
 name: script
 
-# Controlli veloci degli script bash su Linux (i test Swift, che lanciano install.sh in una
-# HOME temporanea, girano in locale con scripts/test.sh: un runner macOS su un repo privato
-# costa dieci volte tanto).
+# Controlli veloci degli script bash su Linux. I test Swift e la build dell'app girano su macOS
+# in swift.yml.
 on:
   push:
     branches: [main]

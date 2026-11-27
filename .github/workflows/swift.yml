@@ -1,0 +1,40 @@
+name: swift
+
+# Test Swift e build dell'app su macOS, senza firma: nessun certificato né segreto nella CI.
+# Le release firmate le crea chi rilascia, sul suo Mac (scripts/package.sh --upload).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test-build:
+    # l'SDK di macOS 26 serve per il deployment target e per Liquid Glass
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Strumenti
+        run: xcodebuild -version && xcrun --show-sdk-version && swift --version
+      # i test lanciano anche install.sh e package.sh in una HOME temporanea
+      - name: Test (scripts/test.sh)
+        run: scripts/test.sh
+      # la stessa build di install.sh dal «Source code»: senza certificato firma ad-hoc
+      - name: Build con i Command Line Tools (scripts/build-clt.sh)
+        run: |
+          mkdir -p "$RUNNER_TEMP/clt"
+          scripts/build-clt.sh "$RUNNER_TEMP/clt"
+          codesign --verify --deep --strict "$RUNNER_TEMP/clt/OpenCode Lens Monitor.app"
+      # la build di Xcode delle release (scripts/package.sh), qui senza firma
+      - name: Build con Xcode (XcodeGen + xcodebuild, senza firma)
+        run: |
+          brew install xcodegen
+          xcodegen generate --quiet
+          xcodebuild -project OpenCodeLensMonitor.xcodeproj -scheme OpenCodeLensMonitor -configuration Release \
+            -derivedDataPath "$RUNNER_TEMP/dd" CODE_SIGNING_ALLOWED=NO build
