@@ -1,0 +1,35 @@
+name: release-please
+
+# A ogni push su main release-please tiene aperta una PR di rilascio: versione (SemVer dai
+# commit convenzionali feat/fix/BREAKING CHANGE) in project.yml e README.md, e la voce nuova
+# di CHANGELOG.md. Al merge della PR crea il tag vX.Y.Z e la release GitHub.
+#
+# Lo zip con l'app compilata non lo fa la CI: l'app va firmata con il certificato del team,
+# che sta solo nel portachiavi di chi rilascia. Dopo il merge, sul Mac di sviluppo:
+#   git checkout main && git pull --tags && scripts/package.sh --upload
+#
+# Serve "Allow GitHub Actions to create and approve pull requests" in
+# Settings → Actions → General → Workflow permissions.
+#
+# Ogni action è fissata allo SHA completo del commit (il tag nel commento); Dependabot
+# (.github/dependabot.yml) tiene gli SHA aggiornati. Nessun permesso a livello di workflow: il
+# job chiede solo quelli che gli servono.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: googleapis/release-please-action@45996ed1f6d02564a971a2fa1b5860e934307cf7 # v5.0.0
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

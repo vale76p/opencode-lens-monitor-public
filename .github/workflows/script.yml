@@ -1,0 +1,33 @@
+name: script
+
+# Controlli veloci degli script bash su Linux (i test Swift, che lanciano install.sh in una
+# HOME temporanea, girano in locale con scripts/test.sh: un runner macOS su un repo privato
+# costa dieci volte tanto).
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  bash:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Sintassi (bash -n)
+        run: for f in install.sh scripts/*.sh; do bash -n "$f"; done
+      # bash -n del bash 5 accetta costrutti che il 3.2 di macOS non ha (mapfile, declare -A, |&):
+      # shellcheck ne segnala l'uso con --shell=bash e trova gli errori classici di quoting.
+      # È già installato sul runner ubuntu-latest.
+      - name: shellcheck
+        run: shellcheck --version && shellcheck --shell=bash --severity=warning install.sh scripts/*.sh
+      # bash 3.2 (macOS) in un locale UTF-8 legge un carattere non ASCII subito dopo $NAME come
+      # parte del nome: "APP…: unbound variable" con set -u. ${NAME} è sicuro.
+      - name: Nessuna $VARIABILE seguita da un carattere non ASCII
+        run: "! LC_ALL=C grep -nE '\\$[A-Za-z_][A-Za-z0-9_]*[^ -~\t]' install.sh scripts/*.sh"

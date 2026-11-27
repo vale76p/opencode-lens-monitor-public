@@ -1,0 +1,72 @@
+name: OpenCodeLensMonitor
+options:
+  bundleIdPrefix: local
+  deploymentTarget:
+    macOS: "26.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.8.0" # x-release-please-version
+    # solo build di sviluppo: le release usano major*10000+minor*100+patch (scripts/package.sh), e una
+    # build di sviluppo con un numero più basso della release installata sembra più vecchia a
+    # LaunchServices e a chronod, che non rileggerebbe la galleria dei widget
+    CURRENT_PROJECT_VERSION: "9999"
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "Apple Development"
+    DEVELOPMENT_TEAM: HS87DR6TBX
+    ENABLE_HARDENED_RUNTIME: YES
+packages:
+  LensMonitorCore:
+    path: LensMonitorCore
+targets:
+  OpenCodeLensMonitor:
+    type: application
+    platform: macOS
+    sources:
+      - path: OpenCodeLensMonitor
+        excludes:
+          - "Resources/Info.plist"
+          - "Resources/OpenCodeLensMonitor.entitlements"
+      - path: Shared
+    dependencies:
+      - package: LensMonitorCore
+      - target: OpenCodeLensWidget
+        embed: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.opencode-lens-monitor
+        PRODUCT_NAME: OpenCode Lens Monitor
+        INFOPLIST_FILE: OpenCodeLensMonitor/Resources/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_ENTITLEMENTS: OpenCodeLensMonitor/Resources/OpenCodeLensMonitor.entitlements
+        # fuori dal sandbox: deve eseguire /bin/launchctl e leggere ~/Library/LaunchAgents
+        ENABLE_APP_SANDBOX: NO
+  OpenCodeLensWidget:
+    type: app-extension
+    platform: macOS
+    sources:
+      - path: OpenCodeLensWidget
+        excludes:
+          - "Info.plist"
+          - "OpenCodeLensWidget.entitlements"
+      - path: Shared
+    dependencies:
+      - package: LensMonitorCore
+      - sdk: WidgetKit.framework
+      - sdk: SwiftUI.framework
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: local.opencode-lens-monitor.widget
+        PRODUCT_NAME: OpenCodeLensWidget
+        INFOPLIST_FILE: OpenCodeLensWidget/Info.plist
+        GENERATE_INFOPLIST_FILE: NO
+        CODE_SIGN_ENTITLEMENTS: OpenCodeLensWidget/OpenCodeLensWidget.entitlements
+        ENABLE_APP_SANDBOX: YES
+schemes:
+  OpenCodeLensMonitor:
+    build:
+      targets:
+        OpenCodeLensMonitor: all
+    run:
+      config: Debug
