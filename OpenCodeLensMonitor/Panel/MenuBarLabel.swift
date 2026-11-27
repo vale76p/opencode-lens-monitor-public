@@ -22,7 +22,8 @@ enum MenuBarIcon {
             drawMark(in: NSRect(x: 0, y: 1, width: 14, height: 14))
             drawDot(dot, in: NSRect(x: 18, y: 4, width: 8, height: 8))
             if !text.isEmpty {
-                let attributes = attributes()
+                // Self.: la costante si chiama come la funzione (vedi PanelState.make, Swift 6.3)
+                let attributes: [NSAttributedString.Key: Any] = Self.attributes()
                 let height = (text as NSString).size(withAttributes: attributes).height
                 (text as NSString).draw(at: NSPoint(x: 30, y: (16 - height) / 2), withAttributes: attributes)
             }

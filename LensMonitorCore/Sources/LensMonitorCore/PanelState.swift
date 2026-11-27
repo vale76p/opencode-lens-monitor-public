@@ -95,7 +95,9 @@ public struct PanelState: Equatable, Sendable {
     public static func make(service: ServiceState, usage: UsageSnapshot?, lensVersion: String? = nil, now: Date, timeZone: TimeZone = .current) -> PanelState {
         // Dopo un refresh fallito il report resta, ma un giorno di budget già finito non è "oggi".
         let report = usage?.budget.flatMap { $0.day.to > now ? $0 : nil }
-        let today = report.map { today($0, models: usage?.models ?? [], history: usage?.history, timeZone: timeZone) }
+        // Self.today e il tipo esplicito: la costante si chiama come la funzione, e lo Swift 6.3 di
+        // Xcode 26 va in crash ("failed to produce diagnostic") se deve risolvere il nome da solo.
+        let today: Today? = report.map { Self.today($0, models: usage?.models ?? [], history: usage?.history, timeZone: timeZone) }
         let dot: StatusColor = switch service {
         case .notInstalled, .failed: .warning
         case .running: today?.alert.color ?? .gray
