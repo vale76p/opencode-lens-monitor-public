@@ -138,7 +138,7 @@ Prima di allegare lo zip, provalo da una cartella estratta: `bash install.sh --c
 
 L'installazione fa parte della compatibilità: bundle id `local.opencode-lens-monitor`, App Group `HS87DR6TBX.local.opencode-lens-monitor`, il nome `OpenCode Lens Monitor.app` e la cartella `~/Applications` non cambiano, e `install.sh` aggiorna da qualsiasi versione precedente. Cambiarne uno, o richiedere un passo a mano per aggiornare, è un cambio incompatibile.
 
-Il workflow ha bisogno di «Allow GitHub Actions to create and approve pull requests» in *Settings → Actions → General → Workflow permissions* del repository. Il workflow `script.yml` controlla a ogni push la sintassi degli script e le variabili seguite da caratteri non ASCII; `swift.yml`, su un runner macOS 26, lancia `scripts/test.sh` e compila l'app senza firma, sia con `scripts/build-clt.sh` sia con XcodeGen e `xcodebuild`.
+Il workflow ha bisogno di «Allow GitHub Actions to create and approve pull requests» in *Settings → Actions → General → Workflow permissions* del repository. Il workflow `script.yml` controlla a ogni push la sintassi degli script e le variabili seguite da caratteri non ASCII; `swift.yml`, su un runner con Xcode 27 (`xcode-27`), lancia `scripts/test.sh` e compila l'app senza firma, sia con `scripts/build-clt.sh` sia con XcodeGen e `xcodebuild`.
 
 ## Build (sviluppo)
 
