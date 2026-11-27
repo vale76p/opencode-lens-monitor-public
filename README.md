@@ -1,6 +1,6 @@
 # OpenCode Monitor
 
-**Versione 0.8.0** <!-- x-release-please-version --> (beta) · [novità](CHANGELOG.md) · [release](https://github.com/vale76p/opencode-lens-monitor-public/releases) · licenza [MIT](LICENSE)
+**Versione 0.8.1** <!-- x-release-please-version --> (beta) · [novità](CHANGELOG.md) · [release](https://github.com/vale76p/opencode-lens-monitor-public/releases) · licenza [MIT](LICENSE)
 
 App nella barra dei menu di macOS per tenere d'occhio [opencode-lens](https://github.com/vale76p/opencode-lens-public): uso di oggi contro i budget per modello nel pannello e nei widget, più avvio e arresto del servizio e scelta tra la lens di produzione e una di sviluppo. Solo OpenCode. Il repository e il bundle si chiamano ancora `opencode-lens-monitor` / `OpenCode Lens Monitor.app`.
 

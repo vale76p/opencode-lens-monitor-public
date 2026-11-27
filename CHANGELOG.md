@@ -4,6 +4,13 @@ Il formato segue [Keep a Changelog](https://keepachangelog.com/it/1.1.0/); le ve
 
 Dalla 0.5.0 le voci le scrive [release-please](https://github.com/googleapis/release-please) dai commit convenzionali (`feat:` → Aggiunto, `fix:` → Corretto, …) nella PR di rilascio, dove si possono rifinire prima del merge. Ogni versione ha un tag git `vX.Y.Z` e una [release su GitHub](https://github.com/vale76p/opencode-lens-monitor-public/releases) con lo zip da installare con `install.sh`. Come si rilascia: [README](README.md#versioni-e-rilasci).
 
+## [0.8.1](https://github.com/vale76p/opencode-lens-monitor-public/compare/v0.8.0...v0.8.1) (2026-11-27)
+
+
+### Corretto
+
+* **opencode-lens-monitor:** si compila anche con Xcode 26 (Swift 6.3) ([f1e9227](https://github.com/vale76p/opencode-lens-monitor-public/commit/f1e922711edf100879afdb0686cce7c2e2a2171a))
+
 ## [0.8.0] (2026-11-21)
 
 
@@ -225,4 +232,3 @@ Serve opencode-lens 0.38 o successiva: con una lens più vecchia il pannello mos
 ## [0.2.0]
 
 Prima versione come repository autonomo, estratto da `opencode-library`; le versioni precedenti sono nella storia di quel repository.
-
